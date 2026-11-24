@@ -1,13 +1,16 @@
-// Arena X1 · servidor multiplayer (Node + ws). Serve o jogo e roda os lobbies via WebSocket em /ws
+// Arena X1 · servidor multiplayer (Node + ws). Serve o jogo (pasta public/) e roda os lobbies via WebSocket em /ws
 const http=require('http'),fs=require('fs'),path=require('path'),{WebSocketServer}=require('ws');
 const PORT=process.env.PORT||3000;
-const HTML=fs.existsSync(path.join(__dirname,'public','index.html'))?path.join(__dirname,'public','index.html'):path.join(__dirname,'index.html');
-const KILLS=[5,10,15,20,30,50],MAXP=[2,3,4,6,8],TEAMS=[0,2,3,4]; // índices usados em cfg: k, m, t (map reservado p/ futuros mapas)
-const rooms=new Map();let nid=1;
+const PUB=path.join(__dirname,'public');
+const MIME={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.png':'image/png','.jpg':'image/jpeg','.svg':'image/svg+xml','.ico':'image/x-icon','.glb':'model/gltf-binary','.mp3':'audio/mpeg','.wav':'audio/wav','.ogg':'audio/ogg'};
 const srv=http.createServer((q,s)=>{
   if(q.url==='/health'){s.writeHead(200);return s.end('ok')}
-  fs.readFile(HTML,(e,d)=>{if(e){s.writeHead(500);return s.end('index.html não encontrado')}
-    s.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-cache'});s.end(d)})});
+  let u;try{u=decodeURIComponent(q.url.split('?')[0])}catch{s.writeHead(400);return s.end()}
+  if(u.endsWith('/'))u+='index.html';
+  const f=path.join(PUB,path.normalize(u));
+  if(!f.startsWith(PUB+path.sep)){s.writeHead(403);return s.end()}
+  fs.readFile(f,(e,d)=>{if(e){s.writeHead(404,{'Content-Type':'text/plain; charset=utf-8'});return s.end('não encontrado')}
+    s.writeHead(200,{'Content-Type':MIME[path.extname(f).toLowerCase()]||'application/octet-stream','Cache-Control':'no-cache'});s.end(d)})});
 const wss=new WebSocketServer({server:srv,path:'/ws',maxPayload:16384});
 const send=(p,o)=>{if(p.ws.readyState===1)p.ws.send(JSON.stringify(o))};
 const all=(r,o,ex)=>{for(const p of r.players.values())if(p!==ex)send(p,o)};

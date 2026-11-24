@@ -1,6 +1,27 @@
 # Arena X1 · Multiplayer
 
-Um único serviço Node serve o jogo (`public/index.html`) e os lobbies via WebSocket (`/ws`).
+Um único serviço Node serve o jogo (pasta `public/`) e os lobbies via WebSocket (`/ws`).
+
+## Estrutura
+```
+server.js              servidor: arquivos de public/ + lobbies WebSocket
+public/index.html      telas e HUD (só marcação)
+public/css/style.css   estilos
+public/js/             código do jogo, carregado nesta ordem:
+  core.js          THREE, configurações salvas, cena, câmera, renderer, utilitários
+  textures.js      texturas procedurais e materiais
+  map.js           mapa, props de cobertura, lista de coberturas
+  character.js     armas, skins, modelo do personagem
+  combat.js        som, dano/derrubado/execução, tiro, pose, física comum
+  player.js        movimento, cobertura, corner rush, ações do jogador
+  bot.js           IA do bot
+  render.js        FSR, HUD e loop principal
+  menu.js          menus, teclado/mouse, personalização
+  multiplayer.js   cliente WebSocket
+  gamepad.js       controle
+  main.js          inicialização
+```
+Os arquivos são scripts comuns (não módulos) e compartilham variáveis globais, então a ordem dos `<script>` no `index.html` importa.
 
 ## Testar local
 ```

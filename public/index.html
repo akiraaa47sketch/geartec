@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Arena X1</title>
+<link rel="stylesheet" href="css/style.css">
+</head><body>
+<div id="hud"><div id="vig"></div>
+<div id="xh"><b></b><u class="a"></u><u class="b"></u><u class="c"></u><u class="d"></u></div>
+<div id="hm"><i style="--r:45deg"></i><i style="--r:135deg"></i><i style="--r:225deg"></i><i style="--r:315deg"></i></div>
+<div id="sc"><span class="nm" id="n1">VOCÊ</span><b id="s1">0</b><span class="sep"></span><b id="s2">0</b><span class="nm" id="n2">BOT</span></div>
+<div id="wp"><div id="wpr"><div id="wpi"></div><div id="wpa"><span id="amN">30</span><span id="amM">/30</span></div></div><div id="ar"><div id="arz"></div><div id="arp"></div><div id="arm"></div></div><div id="sl"></div></div>
+<div id="hpw"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="22" fill="#0b0d10aa" stroke="#ffffff22" stroke-width="5"/><circle id="hpr" cx="32" cy="32" r="22" fill="none" stroke="#d4351c" stroke-width="5" stroke-dasharray="138.2" stroke-dashoffset="0" transform="rotate(-90 32 32)"/></svg><div id="hpn">100</div></div>
+<div id="di"><i></i></div><div id="pd"></div><div id="fps"></div><div id="hint"></div><div id="msg"></div></div>
+<div id="ov" class="main">
+<div class="scr" id="scr-main"><div class="logo">ARENA X1</div><div class="tag">GUNFIGHT 1V1 · COBERTURA · GIB</div>
+<button class="mb" data-a="train">TREINO</button><button class="mb" data-a="skin">PERSONALIZAR</button><button class="mb" data-a="mp">MULTIPLAYER</button><button class="mb" data-a="set">CONFIGURAÇÕES</button><button class="mb" data-a="help">CONTROLES</button></div>
+<div class="scr wide" id="scr-train"><div class="ttl">TREINO</div><div class="opts" id="trbody"></div><button class="mb" data-a="start">INICIAR</button><button class="mb sec" data-a="back">VOLTAR</button></div>
+<div class="scr" id="scr-pause"><div class="ttl" id="pt">PAUSADO</div><button class="mb" id="pc" data-a="cont">CONTINUAR</button><button class="mb" id="prs" data-a="restart">REINICIAR PARTIDA</button><button class="mb" data-a="set">CONFIGURAÇÕES</button><button class="mb" data-a="help">CONTROLES</button><button class="mb sec" data-a="menu">MENU PRINCIPAL</button></div>
+<div class="scr wide" id="scr-set"><div class="ttl">CONFIGURAÇÕES</div><div class="tabs" id="tabs"></div><div class="opts" id="setbody"></div><button class="mb sec" data-a="back">VOLTAR</button></div>
+<div class="scr wide" id="scr-skin" style="width:min(92vw,540px)"><div class="ttl">PERSONALIZAR</div><div class="tabs" id="sktabs"></div><div class="opts" id="skbody"></div><div class="tabs"><button data-a="skrand">ALEATÓRIO</button><button data-a="skreset">RESTAURAR</button></div><div class="tag" style="margin:0">Arraste na tela para girar o personagem</div><button class="mb sec" data-a="back">VOLTAR</button></div>
+<div class="scr wide" id="scr-help"><div class="ttl">CONTROLES</div><div id="help">
+<b>Mover</b><span>WASD mover · Mouse mirar · Shift+W = Corrida (acelera aos poucos · A/D curvam a corrida aos poucos e a câmera acompanha · o mouse não gira a câmera durante a corrida) · C no sprint = Slide · F = pular / vault / mantle</span>
+<b>Armas</b><span>Botão esquerdo atira · Botão direito mira · 1 Fuzil · 2 Escopeta · Q ou roda do mouse alterna (sacar leva ~0,6s) · R recarrega</span>
+<b>Recarga</b><span>Aperte R de novo na zona clara da barra (canto superior direito) = recarga instantânea + dano extra no pente. Cada arma tem a sua zona.</span>
+<b>Cobertura</b><span>Espaço = corre até a cobertura (ou cambalhota) · A/D move na parede · W+Espaço transpõe (com inimigo do outro lado = VOADORA que atordoa) · A/D+Espaço troca de cobertura (na ponta de pilares/caixotes: contorna a quina) · S sai da cobertura · cobertura alta (paredes, pilares): só atira pela ponta · S+Espaço cambalhota</span>
+<b>Cantos</b><span>Na ponta: Espaço+W+A/D = Corner Rush · A/D + botão direito = espiar o canto (só assim) · segurando a mira, W (com ou sem A/D) troca para mirar por cima da cobertura e soltar W + A/D volta pro canto · clique enquanto mira = atira · atirar sem mirar na cobertura = tiro cego</span>
+<b>Derrubado</b><span>Vida zerada sem gib = você cai e rasteja (sangra em 12s). Perto de um inimigo derrubado: E (ou X no controle) = EXECUÇÃO. Tiros também terminam. Dá pra desligar no treino e na sala.</span>
+<b>Câmera</b><span>V troca o ombro da câmera · na cobertura a câmera vai pro lado que você anda</span>
+<b>Dica</b><span>Escopeta colada na cara (até ~3,5 m) = GIB instantâneo · tomar tiro deixa você mais lento por um instante</span>
+<b>Controle</b><span>Binds, sensibilidade e aim assist em CONFIGURAÇÕES › CONTROLE. Padrão: analógico esq. move · analógico dir. mira · LT mira · RT atira · A: toque = cobertura / cambalhota / transpor / trocar de cobertura, segurar = Corrida · B slide · X pular / vault · RB recarrega (RB de novo na zona clara = recarga ativa) · Y alterna arma · ← Escopeta · → Fuzil · na ponta da cobertura, analógico pra frente + lado e toque em A = Corner Rush · Start pausa · nos menus: direcional + A (ok) + B (voltar)</span>
+</div><button class="mb sec" data-a="back">VOLTAR</button></div>
+<div class="scr wide" id="scr-mp"><div class="ttl">MULTIPLAYER</div><input class="in" id="mpn" maxlength="14" placeholder="SEU NOME"><div class="opts" id="mplist"></div>
+<button class="mb" data-a="mpcreate">CRIAR SALA</button><button class="mb sec" data-a="mprefresh">ATUALIZAR LISTA</button><button class="mb sec" data-a="mpback">VOLTAR</button><div class="tag" id="mpst" style="margin:0"></div></div>
+<div class="scr wide" id="scr-room"><div class="ttl" id="rmt">SALA</div><div class="opts" id="rmbody"></div><div class="opts" id="rmpl" style="max-height:24vh"></div>
+<button class="mb" data-a="mpstart" id="rmgo">INICIAR PARTIDA</button><button class="mb sec" data-a="mpleave">SAIR DA SALA</button><div class="tag" id="rmst" style="margin:0"></div></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/core.js"></script>
+<script src="js/textures.js"></script>
+<script src="js/map.js"></script>
+<script src="js/character.js"></script>
+<script src="js/combat.js"></script>
+<script src="js/player.js"></script>
+<script src="js/bot.js"></script>
+<script src="js/render.js"></script>
+<script src="js/menu.js"></script>
+<script src="js/multiplayer.js"></script>
+<script src="js/gamepad.js"></script>
+<script src="js/main.js"></script>
+</body></html>
