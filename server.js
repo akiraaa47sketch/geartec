@@ -1,13 +1,16 @@
-// Arena X1 · servidor multiplayer (Node + ws). Serve o jogo e roda os lobbies via WebSocket em /ws
+// Arena X1 · servidor multiplayer (Node + ws). Serve o jogo (pasta public/) e roda os lobbies via WebSocket em /ws
 const http=require('http'),fs=require('fs'),path=require('path'),{WebSocketServer}=require('ws');
 const PORT=process.env.PORT||3000;
-const HTML=fs.existsSync(path.join(__dirname,'public','index.html'))?path.join(__dirname,'public','index.html'):path.join(__dirname,'index.html');
-const KILLS=[5,10,15,20,30,50],MAXP=[2,3,4,6,8],TEAMS=[0,2,3,4]; // índices usados em cfg: k, m, t (map reservado p/ futuros mapas)
-const rooms=new Map();let nid=1;
+const PUB=path.join(__dirname,'public');
+const MIME={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.png':'image/png','.jpg':'image/jpeg','.svg':'image/svg+xml','.ico':'image/x-icon','.glb':'model/gltf-binary','.mp3':'audio/mpeg','.wav':'audio/wav','.ogg':'audio/ogg'};
 const srv=http.createServer((q,s)=>{
   if(q.url==='/health'){s.writeHead(200);return s.end('ok')}
-  fs.readFile(HTML,(e,d)=>{if(e){s.writeHead(500);return s.end('index.html não encontrado')}
-    s.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-cache'});s.end(d)})});
+  let u;try{u=decodeURIComponent(q.url.split('?')[0])}catch{s.writeHead(400);return s.end()}
+  if(u.endsWith('/'))u+='index.html';
+  const f=path.join(PUB,path.normalize(u));
+  if(!f.startsWith(PUB+path.sep)){s.writeHead(403);return s.end()}
+  fs.readFile(f,(e,d)=>{if(e){s.writeHead(404,{'Content-Type':'text/plain; charset=utf-8'});return s.end('não encontrado')}
+    s.writeHead(200,{'Content-Type':MIME[path.extname(f).toLowerCase()]||'application/octet-stream','Cache-Control':'no-cache'});s.end(d)})});
 const wss=new WebSocketServer({server:srv,path:'/ws',maxPayload:16384});
 const send=(p,o)=>{if(p.ws.readyState===1)p.ws.send(JSON.stringify(o))};
 const all=(r,o,ex)=>{for(const p of r.players.values())if(p!==ex)send(p,o)};
@@ -29,11 +32,11 @@ const err=(p,m)=>send(p,{t:'err',m});
 const H=Object.assign(Object.create(null),{
   list(p){send(p,{t:'rooms',rooms:[...rooms.values()].map(r=>({id:r.id,name:r.name,n:r.players.size,max:MAXP[r.cfg.m],k:KILLS[r.cfg.k],t:nt(r),s:r.state}))})},
   create(p,m){leave(p);setP(p,m);let id;do id=Array.from({length:4},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ'[Math.random()*24|0]).join('');while(rooms.has(id));
-    const r={id,name:String(m.rname||('Sala de '+p.name)).slice(0,24),cfg:{k:1,m:2,t:0,map:0},host:p.id,state:'lobby',players:new Map()};rooms.set(id,r);join(r,p)},
+    const r={id,name:String(m.rname||('Sala de '+p.name)).slice(0,24),cfg:{k:1,m:2,t:0,x:0,map:0},host:p.id,state:'lobby',players:new Map()};rooms.set(id,r);join(r,p)},
   join(p,m){const r=rooms.get(m.id);if(!r)return err(p,'Sala não existe mais');if(r.state!=='lobby')return err(p,'Partida em andamento');
     if(r.players.size>=MAXP[r.cfg.m])return err(p,'Sala cheia');leave(p);setP(p,m);join(r,p)},
   cfg(p,m){const r=p.room;if(!r||r.host!==p.id||r.state!=='lobby'||!m.cfg)return;const ot=r.cfg.t;
-    for(const[k,n]of[['k',KILLS.length],['m',MAXP.length],['t',TEAMS.length],['map',1]]){const v=m.cfg[k];if(Number.isInteger(v)&&v>=0&&v<n)r.cfg[k]=v}
+    for(const[k,n]of[['k',KILLS.length],['m',MAXP.length],['t',TEAMS.length],['x',2],['map',1]]){const v=m.cfg[k];if(Number.isInteger(v)&&v>=0&&v<n)r.cfg[k]=v}
     if(MAXP[r.cfg.m]<r.players.size)r.cfg.m=MAXP.findIndex(x=>x>=r.players.size);
     if(r.cfg.t!==ot){const n=nt(r);[...r.players.values()].forEach((q,i)=>q.team=n?i%n:0)}bc(r)},
   team(p,m){const r=p.room;if(!r||r.state!=='lobby')return;const n=nt(r);if(n&&Number.isInteger(m.team)&&m.team>=0&&m.team<n){p.team=m.team;bc(r)}},
